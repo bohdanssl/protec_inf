@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Лабораторна робота №3 (RC5){% endblock %}
+
+{% block content %}
+    <h2>Алгоритм шифрування RC5</h2>
+    <p style="text-align: center;">Варіант 10: w=16, r=12, b=16 (CBC-Pad Mode)</p>
+
+    {% if ready_file %}
+        <div class="results" style="text-align: center; padding: 20px; border-left: 5px solid #28a745; background-color: #d4edda; color: #155724; border-radius: 5px; margin-top: 20px;">
+            <h3>✅ Файл успішно оброблено!</h3>
+            <p style="margin: 15px 0;">Ваш результат: <br><b>{{ ready_file }}</b></p>
+            
+            <a href="{{ url_for('download_file', filename=ready_file) }}" style="display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 15px;">
+                📥 Завантажити файл
+            </a>
+            <br>
+            <a href="/lab3" style="color: #6c757d; text-decoration: underline;">Повернутися до форми</a>
+        </div>
+
+    {% else %}
+        <form action="/lab3" method="post" enctype="multipart/form-data">
+            <label for="action">Оберіть дію:</label>
+            <select name="action" id="action" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 5px;" required>
+                <option value="encrypt">Зашифрувати файл</option>
+                <option value="decrypt">Дешифрувати файл</option>
+            </select>
+
+            <label for="file_input">Оберіть файл:</label>
+            <input type="file" name="file_input" id="file_input" style="width: 100%; margin-bottom: 20px;" required>
+
+            <label for="passphrase">Парольна фраза:</label>
+            <input type="password" name="passphrase" id="passphrase" placeholder="Введіть пароль..." style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 5px;" required>
+
+            <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Виконати</button>
+        </form>
+        
+        {% if error_msg %}
+            <div class="results" style="margin-top: 20px; padding: 15px; border-left: 5px solid #dc3545; background-color: #f8d7da; color: #842029; border-radius: 5px;">
+                <strong>Помилка:</strong> {{ error_msg }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

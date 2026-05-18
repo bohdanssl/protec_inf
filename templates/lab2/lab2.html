@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Лабораторна робота №2 - MD5{% endblock %}
+
+{% block content %}
+    <h2>Лабораторна робота №2</h2>
+    <p style="text-align: center; color: #6c757d; margin-bottom: 20px;">Хешування та перевірка цілісності (MD5)</p>
+
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 20px;">
+        <h3 style="margin-top: 0; font-size: 1.1em;">1. Хешування тексту</h3>
+        <form method="POST" action="/lab2">
+            <input type="hidden" name="action" value="text">
+            <textarea name="text_input" rows="2" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ced4da; box-sizing: border-box;" required placeholder="Введіть текст (наприклад: abc)"></textarea>
+            <button type="submit" style="margin-top: 10px;">Отримати хеш тексту</button>
+        </form>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 20px;">
+        <h3 style="margin-top: 0; font-size: 1.1em;">2. Хешування файлу</h3>
+        <form method="POST" action="/lab2" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="file">
+            <input type="file" name="file_input" required style="margin-bottom: 10px; width: 100%;">
+            <button type="submit">Отримати хеш файлу</button>
+        </form>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 20px;">
+        <h3 style="margin-top: 0; font-size: 1.1em;">3. Перевірка цілісності</h3>
+        <form method="POST" action="/lab2" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="verify">
+            <input type="file" name="file_input" required style="margin-bottom: 10px; width: 100%;">
+            <input type="text" name="expected_hash" placeholder="Вставте еталонний MD5 хеш сюди..." required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ced4da; box-sizing: border-box; margin-bottom: 10px;">
+            <button type="submit">Перевірити файл</button>
+        </form>
+    </div>
+
+    {% if generated and result_hash %}
+        <div class="results" style="margin-top: 30px; padding: 20px; border-left: 4px solid #0d6efd; background-color: #e2eafc;">
+            <h4 style="margin-top: 0;">Результат:</h4>
+            <p><strong>Джерело:</strong> {{ original_input }}</p>
+            <p style="margin-top: 15px;"><strong>MD5 Хеш:</strong> <br>
+               <span style="font-family: monospace; font-size: 1.2em; color: #d63384; word-break: break-all;">
+                   {{ result_hash }}
+               </span>
+            </p>
+
+            {% if action == 'verify' %}
+                <hr style="border-top: 1px solid #b6d4fe; margin: 15px 0;">
+                {% if is_valid %}
+                    <p style="color: #198754; font-weight: bold; font-size: 1.1em; margin: 0;">✅ Цілісність підтверджено! Файл не змінено.</p>
+                {% else %}
+                    <p style="color: #dc3545; font-weight: bold; font-size: 1.1em; margin: 0;">❌ УВАГА! Хеші не збігаються. Файл пошкоджено або підмінено!</p>
+                {% endif %}
+            {% endif %}
+
+            <form method="POST" action="/download_hash" style="margin-top: 20px;">
+                <input type="hidden" name="hash_value" value="{{ result_hash }}">
+                <button type="submit" class="download-btn" style="background-color: #198754;">📥 Завантажити хеш у .txt</button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

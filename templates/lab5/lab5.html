@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Лабораторна 5: DSS{% endblock %}
+
+{% block content %}
+
+<h2>Цифровий підпис DSS (DSA)</h2>
+
+{% if success_msg %}
+    <div class="alert alert-success">{{ success_msg }}</div>
+{% endif %}
+{% if error_msg %}
+    <div class="alert alert-danger">{{ error_msg }}</div>
+{% endif %}
+
+<div class="section-title">1. Генерація ключів</div>
+<form method="POST">
+    <input type="hidden" name="action" value="generate_keys">
+    <button type="submit">Згенерувати нову пару ключів (DSA 2048-bit)</button>
+</form>
+<div style="display: flex; gap: 10px; margin-top: 10px;">
+    <a href="/download/dsa_public.pem" class="menu-btn btn-secondary" style="margin:0;">Завантажити Public Key</a>
+    <a href="/download/dsa_private.pem" class="menu-btn btn-secondary" style="margin:0;">Завантажити Private Key</a>
+</div>
+
+<div class="section-title">2. Підпис тексту (Створення)</div>
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="sign_text">
+    <label>Текст для підпису:</label>
+    <textarea name="text_input" rows="3" required placeholder="Введіть текст сюди...">{{ text_input or '' }}</textarea>
+    
+    <div class="file-upload-block">
+        <label style="color: #dc3545;">🔑 Файл закритого ключа (Private Key):</label>
+        <input type="file" name="private_key_file" accept=".pem" required>
+    </div>
+    
+    <button type="submit">Підписати</button>
+</form>
+
+{% if signature_output %}
+    <div class="results">
+        <label>Ваш підпис (HEX):</label>
+        <textarea rows="3" readonly>{{ signature_output }}</textarea>
+    </div>
+{% endif %}
+
+<div class="section-title">3. Перевірка тексту (Верифікація)</div>
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="verify_text">
+    <label>Оригінальний текст:</label>
+    <textarea name="text_input" rows="3" required placeholder="Введіть текст...">{{ text_input or '' }}</textarea>
+    
+    <label>Підпис для перевірки (HEX):</label>
+    <textarea name="signature_input" rows="3" required placeholder="Вставте підпис...">{{ signature_input or '' }}</textarea>
+    
+    <div class="file-upload-block">
+        <label style="color: #198754;">🔓 Файл відкритого ключа (Public Key):</label>
+        <input type="file" name="public_key_file" accept=".pem" required>
+    </div>
+    
+    <button type="submit" class="btn-secondary">Перевірити підпис</button>
+</form>
+
+{% if valid_text is defined %}
+    <div class="results {% if valid_text == False %}results-error{% endif %}">
+        <strong>Результат перевірки тексту:</strong> 
+        {% if valid_text %}✅ Підпис коректний!{% else %}❌ Підпис НЕ дійсний!{% endif %}
+    </div>
+{% endif %}
+
+<div class="section-title">4. Підпис файлу</div>
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="sign_file">
+    
+    <label>Оригінальний документ:</label>
+    <input type="file" name="file_input" required style="margin-bottom: 10px; display: block;">
+    
+    <div class="file-upload-block">
+        <label style="color: #dc3545;">🔑 Файл закритого ключа (Private Key):</label>
+        <input type="file" name="private_key_file" accept=".pem" required>
+    </div>
+    
+    <button type="submit">Підписати файл</button>
+</form>
+
+{% if ready_file %}
+    <div class="results">
+        <p>Файл підпису (.sig) готовий.</p>
+        <a href="/download/{{ ready_file }}" class="menu-btn download-btn">Завантажити файл підпису</a>
+    </div>
+{% endif %}
+
+<div class="section-title">5. Перевірка підпису файлу</div>
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="verify_file">
+    
+    <label>Оригінальний документ:</label>
+    <input type="file" name="file_input" required style="margin-bottom: 10px; display: block;">
+    
+    <label>Файл підпису (.sig):</label>
+    <input type="file" name="sig_file_input" accept=".sig,.txt" required style="margin-bottom: 10px; display: block;">
+    
+    <div class="file-upload-block">
+        <label style="color: #198754;">🔓 Файл відкритого ключа (Public Key):</label>
+        <input type="file" name="public_key_file" accept=".pem" required>
+    </div>
+    
+    <button type="submit" class="btn-secondary">Перевірити файл</button>
+</form>
+
+{% if valid_file is defined %}
+    <div class="results {% if valid_file == False %}results-error{% endif %}">
+        <strong>Результат перевірки файлу:</strong> 
+        {% if valid_file %}✅ Підпис коректний!{% else %}❌ Підпис НЕ дійсний!{% endif %}
+    </div>
+{% endif %}
+
+{% endblock %}
