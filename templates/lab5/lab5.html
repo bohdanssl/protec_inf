@@ -23,15 +23,15 @@
     <a href="/download/dsa_private.pem" class="menu-btn btn-secondary" style="margin:0;">Завантажити Private Key</a>
 </div>
 
-<div class="section-title">2. Підпис тексту (Створення)</div>
+div class="section-title">2. Підпис тексту (Створення)</div>
 <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="action" value="sign_text">
-    <label>Текст для підпису:</label>
-    <textarea name="text_input" rows="3" required placeholder="Введіть текст сюди...">{{ text_input or '' }}</textarea>
+    <label for="sign_text_input">Текст для підпису:</label>
+    <textarea id="sign_text_input" name="text_input" rows="3" required placeholder="Введіть текст сюди...">{{ text_input or '' }}</textarea>
     
     <div class="file-upload-block">
-        <label style="color: #dc3545;">🔑 Файл закритого ключа (Private Key):</label>
-        <input type="file" name="private_key_file" accept=".pem" required>
+        <label for="sign_priv_key" style="color: #b02a37;">🔑 Файл закритого ключа (Private Key):</label>
+        <input type="file" id="sign_priv_key" name="private_key_file" accept=".pem" required>
     </div>
     
     <button type="submit">Підписати</button>
@@ -39,23 +39,23 @@
 
 {% if signature_output %}
     <div class="results">
-        <label>Ваш підпис (HEX):</label>
-        <textarea rows="3" readonly>{{ signature_output }}</textarea>
+        <label for="sig_output_readonly">Ваш підпис (HEX):</label>
+        <textarea id="sig_output_readonly" rows="3" readonly>{{ signature_output }}</textarea>
     </div>
 {% endif %}
 
 <div class="section-title">3. Перевірка тексту (Верифікація)</div>
 <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="action" value="verify_text">
-    <label>Оригінальний текст:</label>
-    <textarea name="text_input" rows="3" required placeholder="Введіть текст...">{{ text_input or '' }}</textarea>
+    <label for="verify_text_input">Оригінальний текст:</label>
+    <textarea id="verify_text_input" name="text_input" rows="3" required placeholder="Введіть текст...">{{ text_input or '' }}</textarea>
     
-    <label>Підпис для перевірки (HEX):</label>
-    <textarea name="signature_input" rows="3" required placeholder="Вставте підпис...">{{ signature_input or '' }}</textarea>
+    <label for="verify_sig_input">Підпис для перевірки (HEX):</label>
+    <textarea id="verify_sig_input" name="signature_input" rows="3" required placeholder="Вставте підпис...">{{ signature_input or '' }}</textarea>
     
     <div class="file-upload-block">
-        <label style="color: #198754;">🔓 Файл відкритого ключа (Public Key):</label>
-        <input type="file" name="public_key_file" accept=".pem" required>
+        <label for="verify_pub_key" style="color: #146c43;">🔓 Файл відкритого ключа (Public Key):</label>
+        <input type="file" id="verify_pub_key" name="public_key_file" accept=".pem" required>
     </div>
     
     <button type="submit" class="btn-secondary">Перевірити підпис</button>
@@ -72,13 +72,13 @@
 <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="action" value="sign_file">
     
-    <label>Оригінальний документ:</label>
-    <input type="file" name="file_input" required style="margin-bottom: 10px; display: block;">
+    <label for="sign_file_doc">Оригінальний документ:</label>
+    <input type="file" id="sign_file_doc" name="file_input" required style="margin-bottom: 10px; display: block;">
     
     <div class="file-upload-block">
-        <label style="color: #dc3545;">🔑 Файл закритого ключа (Private Key):</label>
-        <input type="file" name="private_key_file" accept=".pem" required>
-    </div>
+        <label for="sign_file_priv" style="color: #b02a37;">🔑 Файл закритого ключа (Private Key):</label>
+        <input type="file" id="sign_file_priv" name="private_key_file" accept=".pem" required>
+    </div><
     
     <button type="submit">Підписати файл</button>
 </form>
@@ -94,15 +94,15 @@
 <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="action" value="verify_file">
     
-    <label>Оригінальний документ:</label>
-    <input type="file" name="file_input" required style="margin-bottom: 10px; display: block;">
+    <label for="verify_file_doc">Оригінальний документ:</label>
+    <input type="file" id="verify_file_doc" name="file_input" required style="margin-bottom: 10px; display: block;">
     
-    <label>Файл підпису (.sig):</label>
-    <input type="file" name="sig_file_input" accept=".sig,.txt" required style="margin-bottom: 10px; display: block;">
+    <label for="verify_file_sig">Файл підпису (.sig):</label>
+    <input type="file" id="verify_file_sig" name="sig_file_input" accept=".sig,.txt" required style="margin-bottom: 10px; display: block;">
     
     <div class="file-upload-block">
-        <label style="color: #198754;">🔓 Файл відкритого ключа (Public Key):</label>
-        <input type="file" name="public_key_file" accept=".pem" required>
+        <label for="verify_file_pub" style="color: #146c43;">🔓 Файл відкритого ключа (Public Key):label>
+        <input type="file" id="verify_file_pub" name="public_key_file" accept=".pem" required>
     </div>
     
     <button type="submit" class="btn-secondary">Перевірити файл</button>
@@ -115,4 +115,3 @@
     </div>
 {% endif %}
 
-{% endblock %}

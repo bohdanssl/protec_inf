@@ -25,7 +25,7 @@ FILENAME = 'example.txt'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return render_template('main.html')
 
@@ -162,7 +162,7 @@ def _process_lab4_crypt(action, input_path, key_path, input_filename, upload_fol
 @app.route('/lab4', methods=['GET', 'POST'])
 def lab4():
     if request.method != 'POST':
-        return render_template('lab4/lab4.html')
+        return render_template(template4)
 
     action = request.form.get('action')
     uploaded_file = request.files.get('file_input')
@@ -180,12 +180,12 @@ def lab4():
             key_file.save(key_path)
 
             output_filename = _process_lab4_crypt(action, input_path, key_path, input_filename, app.config['UPLOAD_FOLDER'])
-            return render_template('lab4/lab4.html', ready_file=output_filename)
+            return render_template(template4, ready_file=output_filename)
 
         except Exception as e:
-            return render_template('lab4/lab4.html', error_msg=f"Помилка обробки: {str(e)}")
+            return render_template(template4, error_msg=f"Помилка обробки: {str(e)}")
             
-    return render_template('lab4/lab4.html')
+    return render_template(template4)
 
 
 # ======================= ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ LAB 5 =======================
@@ -288,14 +288,14 @@ def lab5():
     except Exception as e:
         return render_template(template5, error_msg=f"Помилка обробки: {str(e)}")
 
-@app.route('/download/<filename>')
+@app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
     except FileNotFoundError:
         return "Файл не знайдено", 404
 
-@app.route('/download')
+@app.route('/download', methods=['GET'])
 def download():
     if FileManager.exists(FILENAME):
         return send_file(FILENAME, as_attachment=True)

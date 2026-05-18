@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Мої Лабораторні{% endblock %}</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; padding: 40px; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; padding: 40px; color: #212529; }
         .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #2c3e50; }
+        h2 { text-align: center; color: #212529; }
         
-        .back-btn { position: fixed; top: 20px; left: 20px; padding: 10px 15px; background-color: #e2e3e5; color: #383d41; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .back-btn:hover { background-color: #d6d8db; color: #0d6efd; }
+        /* Покращено контрастність для кнопки "Назад" */
+        .back-btn { position: fixed; top: 20px; left: 20px; padding: 10px 15px; background-color: #e2e3e5; color: #212529; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn:hover { background-color: #d6d8db; color: #004085; }
         
         label { font-weight: bold; margin-bottom: 8px; display: block; }
         input[type="number"] { width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 5px; box-sizing: border-box; }
-        button, .menu-btn { display: block; width: 100%; padding: 12px; background-color: #0d6efd; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none; box-sizing: border-box; margin-bottom: 10px; }
-        button:hover, .menu-btn:hover { background-color: #0b5ed7; }
+        /* Покращено колір основної кнопки */
+        button, .menu-btn { display: block; width: 100%; padding: 12px; background-color: #0b5ed7; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none; box-sizing: border-box; margin-bottom: 10px; }
+        button:hover, .menu-btn:hover { background-color: #0a58ca; }
         
-        .results { margin-top: 30px; padding: 20px; border-left: 4px solid #198754; background-color: #e8f5e9; }
-        .download-btn { background-color: #198754; margin-top: 15px; }
+        .results { margin-top: 30px; padding: 20px; border-left: 4px solid #146c43; background-color: #e8f5e9; }
+        .download-btn { background-color: #146c43; margin-top: 15px; }
         .download-btn:hover { background-color: #157347; }
     </style>
 </head>

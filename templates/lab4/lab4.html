@@ -6,12 +6,14 @@
     <h2>Алгоритм шифрування RSA</h2>
     <p style="text-align: center; margin-bottom: 30px;">Асиметричне шифрування (Генерація ключів та обробка файлів довільного розміру)</p>
 
+    <!-- Блок виведення помилок -->
     {% if error_msg %}
         <div class="results" style="padding: 15px; border-left: 5px solid #dc3545; background-color: #f8d7da; color: #842029; border-radius: 5px; margin-bottom: 20px;">
             <strong>Помилка:</strong> {{ error_msg }}
         </div>
     {% endif %}
 
+    <!-- Блок успішного шифрування/дешифрування -->
     {% if ready_file %}
         <div class="results" style="text-align: center; padding: 20px; border-left: 5px solid #28a745; background-color: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px;">
             <h3>✅ Файл успішно оброблено!</h3>
@@ -20,10 +22,11 @@
                 📥 Завантажити файл
             </a>
             <br><br>
-            <a href="/lab4" style="color: #6c757d; text-decoration: underline;">Очистити форму</a>
+            <a href="/lab4" style="color: #495057; text-decoration: underline;">Очистити форму</a>
         </div>
     {% endif %}
 
+    <!-- Блок успішної генерації ключів -->
     {% if keys_generated %}
         <div class="results" style="text-align: center; padding: 20px; border-left: 5px solid #0dcaf0; background-color: #cff4fc; color: #055160; border-radius: 5px; margin-bottom: 20px;">
             <h3>🔑 Ключі успішно згенеровано!</h3>
@@ -35,24 +38,26 @@
                 📥 Приватний ключ (private.pem)
             </a>
             <br><br>
-            <a href="/lab4" style="color: #6c757d; text-decoration: underline;">Повернутися</a>
+            <a href="/lab4" style="color: #495057; text-decoration: underline;">Повернутися</a>
         </div>
     {% endif %}
 
     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
         
+        <!-- Секція 1: Генерація ключів -->
         <div style="flex: 1; min-width: 300px; padding: 20px; border: 1px solid #ced4da; border-radius: 5px; background-color: #f8f9fa;">
             <h3 style="margin-top: 0;">1. Генерація ключів</h3>
-            <p style="font-size: 14px; color: #6c757d; margin-bottom: 20px;">
+            <p style="font-size: 14px; color: #495057; margin-bottom: 20px;">
                 Згенерує нову пару ключів (2048 біт). Публічний ключ передається іншим для шифрування, приватний залишається у вас для дешифрування.
             </p>
             <form action="/lab4_generate" method="post">
-                <button type="submit" style="width: 100%; padding: 10px; background-color: #17a2b8; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                <button type="submit" style="width: 100%; padding: 10px; background-color: #17a2b8; color: black; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
                     Згенерувати пару ключів
                 </button>
             </form>
         </div>
 
+        <!-- Секція 2: Обробка файлів -->
         <div style="flex: 2; min-width: 300px; padding: 20px; border: 1px solid #ced4da; border-radius: 5px;">
             <h3 style="margin-top: 0;">2. Обробка файлів</h3>
             <form action="/lab4" method="post" enctype="multipart/form-data">
@@ -69,7 +74,7 @@
                 <label for="key_file" style="display: block; font-weight: bold; margin-bottom: 5px;">Оберіть файл ключа (.pem):</label>
                 <input type="file" name="key_file" id="key_file" style="width: 100%; padding: 5px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 5px;" accept=".pem" required>
 
-                <button type="submit" style="width: 100%; padding: 12px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                <button type="submit" style="width: 100%; padding: 12px 20px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
                     Виконати
                 </button>
             </form>

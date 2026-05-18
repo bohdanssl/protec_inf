@@ -11,11 +11,12 @@
             <h3>✅ Файл успішно оброблено!</h3>
             <p style="margin: 15px 0;">Ваш результат: <br><b>{{ ready_file }}</b></p>
             
-            <a href="{{ url_for('download_file', filename=ready_file) }}" style="display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 15px;">
+            <a href="{{ url_for('download_file', filename=ready_file) }}" style="display: inline-block; padding: 12px 24px; background-color: #198754; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 15px;">
                 📥 Завантажити файл
             </a>
-            <br>
-            <a href="/lab3" style="color: #6c757d; text-decoration: underline;">Повернутися до форми</a>
+            br>
+            <!-- Виправлено контраст сірого кольору -->
+            <a href="/lab3" style="color: #495057; text-decoration: underline;">Повернутися до форми</a>
         </div>
 
     {% else %}
@@ -27,12 +28,10 @@
             </select>
 
             <label for="file_input">Оберіть файл:</label>
-            <input type="file" name="file_input" id="file_input" style="width: 100%; margin-bottom: 20px;" required>
-
-            <label for="passphrase">Парольна фраза:</label>
+            <input type="file" for="passphrase">Парольна фраза:</label>
             <input type="password" name="passphrase" id="passphrase" placeholder="Введіть пароль..." style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 5px;" required>
 
-            <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Виконати</button>
+            <button type="submit" style="padding: 10px 20px; background-color: #0b5ed7; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Виконати</button>
         </form>
         
         {% if error_msg %}
