@@ -10,6 +10,12 @@ from lab4_logic.rsa_cipher import RSAFileManager
 
 from lab5_logic.dss_logic import DSSManager
 
+template1 = 'lab1/lab1.html'
+template2 = 'lab2/lab2.html'
+template3 = 'lab3/lab3.html'
+template4 = 'lab4/lab4.html'
+template5 = 'lab5/lab5.html'
+
 
 #app
 
@@ -35,8 +41,8 @@ def lab1():
         pi_sys = PiEstimator.estimate_cesaro(system_random)
         period_result = lcg.get_period()
         FileManager.save_sequence(FILENAME, c)
-        return render_template('lab1/lab1.html', k=k, pi_lcg=pi_lcg, pi_sys=pi_sys, period_result=period_result, posl=c[:10], generated=True)
-    return render_template('lab1/lab1.html', generated=False)
+        return render_template(template1, k=k, pi_lcg=pi_lcg, pi_sys=pi_sys, period_result=period_result, posl=c[:10], generated=True)
+    return render_template(template1, generated=False)
 
 # ======================= ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ LAB 2 =======================
 def _process_lab2_file(request, hasher, action, upload_folder):
@@ -64,7 +70,7 @@ def _process_lab2_file(request, hasher, action, upload_folder):
 @app.route('/lab2', methods=['GET', 'POST'])
 def lab2():
     if request.method != 'POST':
-        return render_template('lab2/lab2.html', generated=False)
+        return render_template(template2, generated=False)
 
     action = request.form.get('action')
     hasher = MD5Hasher()
@@ -80,7 +86,7 @@ def lab2():
             request, hasher, action, app.config['UPLOAD_FOLDER']
         )
 
-    return render_template('lab2/lab2.html', 
+    return render_template(template2, 
                            result_hash=result_hash, 
                            original_input=original_input, 
                            is_valid=is_valid, 
@@ -115,7 +121,7 @@ def _process_lab3_action(action, filepath, filename, passphrase, upload_folder):
 @app.route('/lab3', methods=['GET', 'POST'])
 def lab3():
     if request.method != 'POST':
-        return render_template('lab3/lab3.html')
+        return render_template(template3)
 
     action = request.form.get('action')
     passphrase = request.form.get('passphrase')
@@ -127,9 +133,9 @@ def lab3():
         uploaded_file.save(filepath)
         
         context = _process_lab3_action(action, filepath, filename, passphrase, app.config['UPLOAD_FOLDER'])
-        return render_template('lab3/lab3.html', **context)
+        return render_template(template3, **context)
 
-    return render_template('lab3/lab3.html')
+    return render_template(template3)
 
 
 # ======================= ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ LAB 4 =======================
@@ -254,7 +260,7 @@ def _dss_verify_file(request, dss, upload_folder):
 @app.route('/lab5', methods=['GET', 'POST'])
 def lab5():
     if request.method != 'POST':
-        return render_template('lab5/lab5.html')
+        return render_template(template5)
 
     action = request.form.get('action')
     dss = DSSManager()
@@ -277,10 +283,10 @@ def lab5():
         elif action == 'verify_file':
             context = _dss_verify_file(request, dss, upload_folder)
 
-        return render_template('lab5/lab5.html', **context)
+        return render_template(template5, **context)
 
     except Exception as e:
-        return render_template('lab5/lab5.html', error_msg=f"Помилка обробки: {str(e)}")
+        return render_template(template5, error_msg=f"Помилка обробки: {str(e)}")
 
 @app.route('/download/<filename>')
 def download_file(filename):
