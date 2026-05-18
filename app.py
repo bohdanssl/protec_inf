@@ -1,8 +1,41 @@
 import os
+from flask import Flask, render_template, request, send_file, Response, send_from_directory, abort
+from lab1_logic.logic import LCG, SystemGenerator, PiEstimator, FileManager
 from werkzeug.utils import secure_filename
-from flask import render_template, request
 
-# --- HELPER FUNCTIONS FOR LAB 2 ---
+from lab2_logic.md5 import MD5Hasher
+
+from lab3_logic.rc5 import FileManagerRC5
+
+from lab4_logic.rsa_cipher import RSAFileManager
+
+from lab5_logic.dss_logic import DSSManager
+
+
+app = Flask(__name__)
+FILENAME = 'example.txt'
+
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+@app.route('/')
+def index():
+    return render_template('main.html')
+
+@app.route('/lab1', methods=['GET', 'POST'])
+def lab1():
+    if request.method == 'POST':
+        k = int(request.form.get('k_val', 100000))
+        lcg = LCG()
+        sys_gen = SystemGenerator()
+        c = lcg.generate(k)
+        system_random = sys_gen.generate(k)
+        pi_lcg = PiEstimator.estimate_cesaro(c)
+        pi_sys = PiEstimator.estimate_cesaro(system_random)
+        period_result = lcg.get_period()
+        FileManager.save_sequence(FILENAME, c)
+        return render_template('lab1/lab1.html', k=k, pi_lcg=pi_lcg, pi_sys=pi_sys, period_result=period_result, posl=c[:10], generated=True)
+    return render_template('lab1/lab1.html', generated=False)
 
 def _process_lab2_text(text):
     hasher = MD5Hasher()
@@ -52,7 +85,6 @@ def lab2():
     return render_template('lab2/lab2.html', generated=False)
 
 
-# --- HELPER FUNCTIONS FOR LAB 3 ---
 
 def _process_lab3_file(action, passphrase, uploaded_file, upload_folder):
     filename = secure_filename(uploaded_file.filename)
@@ -94,7 +126,6 @@ def lab3():
     return render_template('lab3/lab3.html')
 
 
-# --- HELPER FUNCTIONS FOR LAB 4 ---
 
 def _process_lab4_crypto(action, uploaded_file, key_file, upload_folder):
     input_filename = secure_filename(uploaded_file.filename)
@@ -136,7 +167,6 @@ def lab4():
     return render_template('lab4/lab4.html')
 
 
-# --- HELPER FUNCTIONS FOR LAB 5 ---
 
 def _save_uploaded_file(file_obj, upload_folder):
     """Saves a file and returns its path, or None if invalid."""
