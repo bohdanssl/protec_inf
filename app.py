@@ -138,7 +138,6 @@ def lab3():
     return render_template(template3)
 
 
-# ======================= ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ LAB 4 =======================
 def _process_lab4_crypt(action, input_path, key_path, input_filename, upload_folder):
     rsa_manager = RSAFileManager()
 

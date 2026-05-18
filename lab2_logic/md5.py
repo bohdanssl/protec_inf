@@ -5,7 +5,7 @@ import os
 class MD5Hasher:
     def __init__(self):
         self._init_state()
-        self.K = [int(abs(math.sin(i + 1)) * (2**32)) & 0xFFFFFFFF for i in range(64)]
+        self.k = [int(abs(math.sin(i + 1)) * (2**32)) & 0xFFFFFFFF for i in range(64)]
         self.s = [
             7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
             5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
@@ -14,50 +14,54 @@ class MD5Hasher:
         ]
 
     def _init_state(self):
-        self.A = 0x67452301
-        self.B = 0xEFCDAB89
-        self.C = 0x98BADCFE
-        self.D = 0x10325476
+        self.a = 0x67452301
+        self.b = 0xEFCDAB89
+        self.c = 0x98BADCFE
+        self.d = 0x10325476
 
     @staticmethod
-    def _F(x, y, z): return (x & y) | (~x & z)
+    def _f(x, y, z): return (x & y) | (~x & z)
+    
     @staticmethod
-    def _G(x, y, z): return (x & z) | (y & ~z)
+    def _g(x, y, z): return (x & z) | (y & ~z)
+    
     @staticmethod
-    def _H(x, y, z): return x ^ y ^ z
+    def _h(x, y, z): return x ^ y ^ z
+    
     @staticmethod
-    def _I(x, y, z): return y ^ (x | ~z)
+    def _i(x, y, z): return y ^ (x | ~z)
+    
     @staticmethod
     def _left_rotate(x, amount):
         x &= 0xFFFFFFFF
         return ((x << amount) | (x >> (32 - amount))) & 0xFFFFFFFF
 
     def _process_chunk(self, chunk):
-        M = list(struct.unpack('<16I', chunk))
-        A, B, C, D = self.A, self.B, self.C, self.D
+        m = list(struct.unpack('<16I', chunk))
+        a, b, c, d = self.a, self.b, self.c, self.d
 
         for j in range(64):
             if 0 <= j <= 15:
-                F = self._F(B, C, D)
+                f_val = self._f(b, c, d)
                 g = j
             elif 16 <= j <= 31:
-                F = self._G(B, C, D)
+                f_val = self._g(b, c, d)
                 g = (5 * j + 1) % 16
             elif 32 <= j <= 47:
-                F = self._H(B, C, D)
+                f_val = self._h(b, c, d)
                 g = (3 * j + 5) % 16
             elif 48 <= j <= 63:
-                F = self._I(B, C, D)
+                f_val = self._i(b, c, d)
                 g = (7 * j) % 16
 
-            to_rotate = A + F + self.K[j] + M[g]
-            new_B = (B + self._left_rotate(to_rotate, self.s[j])) & 0xFFFFFFFF
-            A, B, C, D = D, new_B, B, C
+            to_rotate = a + f_val + self.k[j] + m[g]
+            new_b = (b + self._left_rotate(to_rotate, self.s[j])) & 0xFFFFFFFF
+            a, b, c, d = d, new_b, b, c
 
-        self.A = (self.A + A) & 0xFFFFFFFF
-        self.B = (self.B + B) & 0xFFFFFFFF
-        self.C = (self.C + C) & 0xFFFFFFFF
-        self.D = (self.D + D) & 0xFFFFFFFF
+        self.a = (self.a + a) & 0xFFFFFFFF
+        self.b = (self.b + b) & 0xFFFFFFFF
+        self.c = (self.c + c) & 0xFFFFFFFF
+        self.d = (self.d + d) & 0xFFFFFFFF
 
     def compute_hash(self, message: str) -> str:
         self._init_state()
@@ -72,10 +76,9 @@ class MD5Hasher:
         for i in range(0, len(msg_bytes), 64):
             self._process_chunk(msg_bytes[i:i+64])
 
-        return struct.pack('<4I', self.A, self.B, self.C, self.D).hex().upper()
+        return struct.pack('<4I', self.a, self.b, self.c, self.d).hex().upper()
 
     def compute_file_hash(self, filepath: str) -> str:
-
         self._init_state()
         file_size_bytes = 0
 
@@ -100,4 +103,4 @@ class MD5Hasher:
         for i in range(0, len(msg_bytes), 64):
             self._process_chunk(msg_bytes[i:i+64])
 
-        return struct.pack('<4I', self.A, self.B, self.C, self.D).hex().upper()
+        return struct.pack('<4I', self.a, self.b, self.c, self.d).hex().upper()
