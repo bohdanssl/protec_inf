@@ -1,6 +1,5 @@
 import os
 from flask import Flask, render_template, request, send_file, Response
-
 from lab1_logic.logic import LCG, SystemGenerator, PiEstimator, FileManager
 
 from lab2_logic.md5 import MD5Hasher
@@ -11,6 +10,8 @@ from lab4_logic.rsa_cipher import RSAFileManager
 
 from lab5_logic.dss_logic import DSSManager
 
+
+#app
 
 app = Flask(__name__)
 FILENAME = 'example.txt'
